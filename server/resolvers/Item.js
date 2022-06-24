@@ -22,7 +22,12 @@ const Item = {
       try {
         let { page, pageSize } = input;
 
-        let options = { limit: pageSize, offset: (page - 1) * pageSize };
+        let paginationOption =
+          page && pageSize
+            ? { limit: pageSize, offset: (page - 1) * pageSize }
+            : {};
+
+        let options = { ...paginationOption };
 
         // let response = await ItemModel.findAll({ ...options });
         let response = await ItemModel.findAndCountAll({ ...options });
