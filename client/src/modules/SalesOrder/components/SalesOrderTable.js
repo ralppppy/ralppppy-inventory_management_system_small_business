@@ -1,33 +1,9 @@
 import { Table } from "antd";
 import React from "react";
+import { useSelector } from "react-redux";
 
 function SalesOrderTable() {
-  const dataSource = [
-    {
-      key: "1",
-      date: "10/29/2021",
-      customerName: "Mike",
-      orderedItem: "Chicken - 1 kg",
-      available: 23,
-      quantity: 32,
-      costPrice: 233,
-      retailPrice: 12333,
-      totalProfit: 23333,
-      totalPrice: 2321312,
-    },
-    {
-      key: "2",
-      date: "10/29/2021",
-      customerName: "John",
-      orderedItem: "Chicken - 2 kg",
-      available: 23,
-      quantity: 1,
-      costPrice: 233,
-      retailPrice: 12333,
-      totalProfit: 23333,
-      totalPrice: 2321312,
-    },
-  ];
+  const salesOrders = useSelector((store) => store.SalesOrder.salesOrders);
 
   const columns = [
     {
@@ -90,7 +66,7 @@ function SalesOrderTable() {
   ];
   return (
     <div>
-      <Table dataSource={dataSource} columns={columns} />
+      <Table dataSource={salesOrders} columns={columns} />
     </div>
   );
 }

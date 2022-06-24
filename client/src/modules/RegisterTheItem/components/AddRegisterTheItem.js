@@ -108,6 +108,7 @@ function AddRegisterTheItem() {
                 }}
                 title="Profit Percentage"
                 value={profit.profitPercent}
+                precision={2}
               />
             </Col>
           </Row>
