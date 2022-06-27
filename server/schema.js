@@ -8,6 +8,11 @@ const typeDefs = gql`
     items(input: ItemsInput): ItemsOutput
     searchedItems(itemName: String!, page: Int, pageSize: Int): ItemsOutput
     salesOrders(input: SalesOrderInput): SalesOrderOutput
+    searchedSalesOrder(
+      searchText: String
+      page: Int
+      pageSize: Int
+    ): SalesOrderOutput
   }
 
   type Mutation {

@@ -1,4 +1,9 @@
-const { SalesOrder: SalesOrderModel } = require("../models");
+const { Op, QueryTypes } = require("sequelize");
+const {
+  SalesOrder: SalesOrderModel,
+  Item: ItemModel,
+  sequelize,
+} = require("../models");
 
 const SalesOrder = {
   mutations: {
@@ -29,6 +34,36 @@ const SalesOrder = {
 
         // let response = await ItemModel.findAll({ ...options });
         let response = await SalesOrderModel.findAndCountAll({ ...options });
+
+        return response;
+      } catch (error) {
+        console.log(error);
+        return error;
+      }
+    },
+
+    searchedSalesOrder: async (_, { searchText, page, pageSize }) => {
+      try {
+        let options = { limit: pageSize, offset: (page - 1) * pageSize };
+
+        let where = searchText
+          ? {
+              where: {
+                [Op.or]: [
+                  {
+                    customerName: { [Op.substring]: searchText },
+                  },
+                  {
+                    date: { [Op.substring]: searchText },
+                  },
+                ],
+              },
+            }
+          : {};
+
+        options = { ...options, ...where };
+
+        const response = await SalesOrderModel.findAndCountAll({ ...options });
 
         return response;
       } catch (error) {

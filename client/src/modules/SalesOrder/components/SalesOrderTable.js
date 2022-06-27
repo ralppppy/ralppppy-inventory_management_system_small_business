@@ -43,7 +43,7 @@ function SalesOrderTable() {
       dataIndex: "date",
       key: "date",
       render: (value) => {
-        return <Text>{dayjs(value).format("YYYY-MM-DD")}</Text>;
+        return <Text>{value && dayjs(value).format("YYYY-MM-DD")}</Text>;
       },
     },
     {

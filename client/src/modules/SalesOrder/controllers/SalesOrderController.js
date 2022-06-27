@@ -1,3 +1,4 @@
+import { message } from "antd";
 import dayjs from "dayjs";
 import {
   setItems,
@@ -16,7 +17,8 @@ const SalesOrderController = ({
   createSalesOrder,
   searchParams,
   navigate,
-
+  setSearchParams,
+  searchSalesOrder,
   defaultPageSize,
 }) => {
   const handleOnChangePage = (page) => {
@@ -74,13 +76,41 @@ const SalesOrderController = ({
     } = await createSalesOrder({
       variables: {
         ...values,
-        date: dayjs(values.date).format("YYYY-MM-DD"),
+        date: values.date ? dayjs(values.date).format("YYYY-MM-DD") : null,
       },
     });
     let data = _formatSalesOrder(salesOrder);
     salesOrder = { ...salesOrder, key: salesOrder.id, ...data };
-    handleCancel();
     dispatch(setSalesOrder(salesOrder));
+    handleCancel();
+    message.success({ content: "Succesfully created sales order" });
+  };
+
+  const handleSalesOrderSearch = async (searchText) => {
+    const initialPage = 1;
+    searchParams.set("page", initialPage);
+
+    setSearchParams(searchParams);
+
+    let {
+      data: {
+        searchedSalesOrder: { count, rows },
+      },
+    } = await searchSalesOrder({
+      variables: {
+        searchText,
+        page: initialPage,
+        pageSize: defaultPageSize,
+      },
+    });
+
+    let newSalesOrder = rows.map((salesOrder) => {
+      return _formatSalesOrder(salesOrder);
+    });
+
+    dispatch(setSalesOrders(newSalesOrder));
+    dispatch(setTotalDataSize(count));
+    dispatch(setIsFetchingData(false));
   };
 
   const handleGetItems = async () => {
@@ -98,7 +128,6 @@ const SalesOrderController = ({
       let item = items.find(
         (item) => parseInt(item.id) === parseInt(values.orderedItem)
       );
-      console.log({ items, item, values }, "costPrice");
       const costPrice = item.costPrice;
       const retailPrice = item.retailPrice;
       const totalProfit = (item.retailPrice - item.costPrice) * quantity;
@@ -125,6 +154,7 @@ const SalesOrderController = ({
     handleGetItems,
     onFinish,
     handleOnChangePage,
+    handleSalesOrderSearch,
   };
 };
 

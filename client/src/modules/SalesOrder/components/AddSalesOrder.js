@@ -20,6 +20,8 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { ITEMS } from "../../RegisterTheItem/requests/queries";
 import { useDispatch, useSelector } from "react-redux";
 import { CREATE_SALES_ORDER } from "../requests/mutations";
+import { SEARCH_SALES_ORDER } from "../requests/queries";
+import { useSearchParams } from "react-router-dom";
 
 const { Search } = Input;
 
@@ -28,21 +30,35 @@ const { Option } = Select;
 function AddSalesOrder() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [createSalesOrder] = useMutation(CREATE_SALES_ORDER);
+  const [searchSalesOrder] = useLazyQuery(SEARCH_SALES_ORDER);
   const items = useSelector((store) => store.SalesOrder.items);
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const defaultPageSize = useSelector(
+    (store) => store.SalesOrder.defaultPageSize
+  );
   const [form] = Form.useForm();
   const [getItems] = useLazyQuery(ITEMS, {});
 
   const dispatch = useDispatch();
 
-  const { showModal, handleOk, handleCancel, handleGetItems, onFinish } =
-    SalesOrderController({
-      setIsModalVisible,
-      getItems,
-      dispatch,
-      items,
-      createSalesOrder,
-    });
+  const {
+    showModal,
+    handleOk,
+    handleCancel,
+    handleGetItems,
+    onFinish,
+    handleSalesOrderSearch,
+  } = SalesOrderController({
+    setIsModalVisible,
+    getItems,
+    dispatch,
+    items,
+    createSalesOrder,
+    searchSalesOrder,
+    searchParams,
+    setSearchParams,
+    defaultPageSize,
+  });
 
   useEffect(() => {
     handleGetItems();
@@ -61,9 +77,7 @@ function AddSalesOrder() {
             enterButton={<Button>Search</Button>}
             className="w-100"
             allowClear
-            onSearch={(e) => {
-              console.log(e, "df");
-            }}
+            onSearch={handleSalesOrderSearch}
             placeholder="Search for customer name or ordered item"
           />
         </div>
