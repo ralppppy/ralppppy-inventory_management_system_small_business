@@ -16,9 +16,10 @@ import {
 import React, { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { SalesOrderController } from "../controllers";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { ITEMS } from "../../RegisterTheItem/requests/queries";
 import { useDispatch, useSelector } from "react-redux";
+import { CREATE_SALES_ORDER } from "../requests/mutations";
 
 const { Search } = Input;
 
@@ -26,7 +27,7 @@ const { Option } = Select;
 
 function AddSalesOrder() {
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const [createSalesOrder] = useMutation(CREATE_SALES_ORDER);
   const items = useSelector((store) => store.SalesOrder.items);
 
   const [form] = Form.useForm();
@@ -40,6 +41,7 @@ function AddSalesOrder() {
       getItems,
       dispatch,
       items,
+      createSalesOrder,
     });
 
   useEffect(() => {

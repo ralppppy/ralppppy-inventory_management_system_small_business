@@ -1,5 +1,6 @@
 const { User } = require("../models");
 const Item = require("./Item");
+const SalesOrder = require("./SalesOrder");
 
 const Mutation = {
   login: async (_, { email, password }, { req }) => {
@@ -25,6 +26,7 @@ const Mutation = {
   },
 
   ...Item.mutations,
+  ...SalesOrder.mutations,
 };
 
 module.exports = Mutation;

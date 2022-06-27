@@ -7,13 +7,14 @@ const typeDefs = gql`
     getUsers: [User]
     items(input: ItemsInput): ItemsOutput
     searchedItems(itemName: String!, page: Int, pageSize: Int): ItemsOutput
+    salesOrders(input: SalesOrderInput): SalesOrderOutput
   }
 
   type Mutation {
     login(email: String!, password: String!): User
     createUser(input: CreateUserInput): User
     createItem(input: CreateItemInput): Item
-
+    createSalesOrder(input: CreateSalesOrderInput!): SalesOrder
     test: String
   }
 
@@ -37,6 +38,19 @@ const typeDefs = gql`
     rows: [Item!]!
   }
 
+  type SalesOrder {
+    id: ID
+    date: String
+    customerName: String
+    orderedItem: String
+    quantity: Int
+  }
+
+  type SalesOrderOutput {
+    count: Int
+    rows: [SalesOrder!]!
+  }
+
   input CreateUserInput {
     firstName: String
     lastName: String
@@ -53,6 +67,17 @@ const typeDefs = gql`
   input ItemsInput {
     page: Int
     pageSize: Int
+  }
+  input SalesOrderInput {
+    page: Int
+    pageSize: Int
+  }
+
+  input CreateSalesOrderInput {
+    date: String
+    customerName: String
+    orderedItem: String
+    quantity: Int
   }
 `;
 

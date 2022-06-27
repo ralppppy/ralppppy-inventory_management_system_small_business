@@ -9,6 +9,10 @@ const store = configureStore({
     RegisterTheItem: RegisterTheItemSlice,
     SalesOrder: SalesOrderModel,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export default store;
