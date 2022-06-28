@@ -46,24 +46,35 @@ const SalesOrder = {
       try {
         let options = { limit: pageSize, offset: (page - 1) * pageSize };
 
-        let where = searchText
-          ? {
-              where: {
-                [Op.or]: [
-                  {
-                    customerName: { [Op.substring]: searchText },
-                  },
-                  {
-                    date: { [Op.substring]: searchText },
-                  },
-                ],
-              },
-            }
-          : {};
+        let response = { rows: [], count: 0 };
 
-        options = { ...options, ...where };
+        const rowsSQL = `SELECT 
+                          SalesOrders.id as id, 
+                          SalesOrders.customerName as customerName,
+                          SalesOrders.date as date,
+                          SalesOrders.quantity as quantity,
+                          SalesOrders.orderedItem as orderedItem,
+                          Items.itemName as itemName
+                        FROM
+                          SalesOrders
+                        LEFT OUTER JOIN
+                          Items
+                        ON
+                          SalesOrders.orderedItem = Items.id
+                        WHERE
+                          SalesOrders.customerName LIKE "%${searchText}%"
+                        OR
+                          SalesOrders.date LIKE "%${searchText}%"
+                        OR
+                          Items.itemName LIKE "%${searchText}%"
+                        LIMIT
+                          ${pageSize}
+                        OFFSET
+                          ${(page - 1) * pageSize}`;
 
-        const response = await SalesOrderModel.findAndCountAll({ ...options });
+        let rows = await sequelize.query(rowsSQL, { type: QueryTypes.SELECT });
+
+        response = { ...response, rows, count: rows.length };
 
         return response;
       } catch (error) {
