@@ -1,4 +1,5 @@
 const Item = require("./Item");
+const PurchaseOrder = require("./PurchasedOrder");
 const SalesOrder = require("./SalesOrder");
 
 const Query = {
@@ -10,6 +11,7 @@ const Query = {
   },
   ...Item.queries,
   ...SalesOrder.queries,
+  ...PurchaseOrder.queries,
 };
 
 module.exports = Query;

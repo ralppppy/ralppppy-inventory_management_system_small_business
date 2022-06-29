@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   items: [],
-  defaultPageSize: 10,
+  defaultPageSize: 2,
   totalDataSize: 0,
   isFetchingData: true,
 };

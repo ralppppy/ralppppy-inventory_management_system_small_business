@@ -20,9 +20,13 @@ const RegisterTheItemController = ({
   setSearchParams,
 }) => {
   const handleOnChangePage = (page) => {
+    let searchText = searchParams.get("search");
+    let search = searchText
+      ? `?page=${page}&search=${searchText}`
+      : `?page=${page}`;
     navigate({
       pathname: "/register-item",
-      search: `?page=${page}`,
+      search: search,
     });
   };
   const handleGetItems = async (p) => {
@@ -38,7 +42,13 @@ const RegisterTheItemController = ({
         items: { rows, count },
       },
     } = await getItems({
-      variables: { page: currentPage, pageSize: defaultPageSize },
+      variables: {
+        page: currentPage,
+        pageSize: defaultPageSize,
+        searchParams: searchParams.get("search")
+          ? searchParams.get("search")
+          : "",
+      },
     });
 
     let formatedItems = _formatItems(rows);
@@ -105,6 +115,11 @@ const RegisterTheItemController = ({
   const handleItemsSearch = async (searchText) => {
     const initialPage = 1;
     searchParams.set("page", initialPage);
+    if (searchText) {
+      searchParams.set("search", searchText);
+    } else {
+      searchParams.delete("search");
+    }
 
     setSearchParams(searchParams);
 

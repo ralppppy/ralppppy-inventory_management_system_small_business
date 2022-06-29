@@ -48,6 +48,24 @@ const SalesOrder = {
 
         let response = { rows: [], count: 0 };
 
+        const countSQL = `SELECT 
+                            COUNT(SalesOrders.id) as count
+                          FROM
+                            SalesOrders
+                          LEFT OUTER JOIN
+                            Items
+                          ON
+                            SalesOrders.orderedItem = Items.id
+                          WHERE
+                            SalesOrders.customerName LIKE "%${searchText}%"
+                          OR
+                            SalesOrders.date LIKE "%${searchText}%"
+                          OR
+                            Items.itemName LIKE "%${searchText}%"`;
+
+        let count = await sequelize.query(countSQL, {
+          type: QueryTypes.SELECT,
+        });
         const rowsSQL = `SELECT 
                           SalesOrders.id as id, 
                           SalesOrders.customerName as customerName,
@@ -74,7 +92,7 @@ const SalesOrder = {
 
         let rows = await sequelize.query(rowsSQL, { type: QueryTypes.SELECT });
 
-        response = { ...response, rows, count: rows.length };
+        response = { ...response, rows, count: count[0].count };
 
         return response;
       } catch (error) {

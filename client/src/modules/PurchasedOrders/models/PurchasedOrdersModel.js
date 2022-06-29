@@ -2,14 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   items: [],
-  salesOrders: [],
-  defaultPageSize: 2,
+  purchaseOrders: [],
+  defaultPageSize: 10,
   totalDataSize: 0,
   isFetchingData: true,
 };
 
-export const SalesOrderSlice = createSlice({
-  name: "SalesOrder",
+export const PurchasedOrdersSlice = createSlice({
+  name: "PurchasedOrder",
   initialState,
   reducers: {
     setItems: (state, action) => {
@@ -18,14 +18,14 @@ export const SalesOrderSlice = createSlice({
       });
       state.items = dataWithKey;
     },
-    setSalesOrders: (state, action) => {
+    setPurchaseOrders: (state, action) => {
       let dataWithKey = action.payload.map((item) => {
         return { ...item, key: item.id };
       });
-      state.salesOrders = dataWithKey;
+      state.purchaseOrders = dataWithKey;
     },
-    setSalesOrder: (state, action) => {
-      state.salesOrders.push(action.payload);
+    setPurchaseOrder: (state, action) => {
+      state.purchaseOrders.push(action.payload);
     },
 
     setTotalDataSize: (state, action) => {
@@ -41,10 +41,12 @@ export const SalesOrderSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   setItems,
-  setSalesOrders,
-  setSalesOrder,
+  setPurchaseOrder,
+  setPurchaseOrders,
+  //   setSalesOrders,
+  //   setSalesOrder,
   setTotalDataSize,
   setIsFetchingData,
-} = SalesOrderSlice.actions;
+} = PurchasedOrdersSlice.actions;
 
-export default SalesOrderSlice.reducer;
+export default PurchasedOrdersSlice.reducer;

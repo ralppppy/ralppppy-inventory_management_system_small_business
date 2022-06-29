@@ -13,6 +13,7 @@ const typeDefs = gql`
       page: Int
       pageSize: Int
     ): SalesOrderOutput
+    purchaseOrders(input: PurchaseOrderInput): SalesOrderOutput
   }
 
   type Mutation {
@@ -20,6 +21,7 @@ const typeDefs = gql`
     createUser(input: CreateUserInput): User
     createItem(input: CreateItemInput): Item
     createSalesOrder(input: CreateSalesOrderInput!): SalesOrder
+    createPurchaseOrder(input: CreatePurchaseOrderInput!): PurchaseOrder
     test: String
   }
 
@@ -50,10 +52,21 @@ const typeDefs = gql`
     orderedItem: String
     quantity: Int
   }
+  type PurchaseOrder {
+    id: ID
+    date: String
+    orderedItem: String
+    quantity: Int
+  }
 
   type SalesOrderOutput {
     count: Int
     rows: [SalesOrder!]!
+  }
+
+  type PurchaseOrderOutput {
+    count: Int
+    rows: [PurchaseOrder!]!
   }
 
   input CreateUserInput {
@@ -72,8 +85,13 @@ const typeDefs = gql`
   input ItemsInput {
     page: Int
     pageSize: Int
+    searchParams: String
   }
   input SalesOrderInput {
+    page: Int
+    pageSize: Int
+  }
+  input PurchaseOrderInput {
     page: Int
     pageSize: Int
   }
@@ -81,6 +99,11 @@ const typeDefs = gql`
   input CreateSalesOrderInput {
     date: String
     customerName: String
+    orderedItem: String
+    quantity: Int
+  }
+  input CreatePurchaseOrderInput {
+    date: String
     orderedItem: String
     quantity: Int
   }

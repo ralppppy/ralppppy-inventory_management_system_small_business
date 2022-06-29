@@ -1,8 +1,10 @@
 import { gql } from "@apollo/client";
 
 export const ITEMS = gql`
-  query Items($page: Int, $pageSize: Int) {
-    items(input: { page: $page, pageSize: $pageSize }) {
+  query Items($page: Int, $pageSize: Int, $searchParams: String) {
+    items(
+      input: { page: $page, pageSize: $pageSize, searchParams: $searchParams }
+    ) {
       count
       rows {
         id

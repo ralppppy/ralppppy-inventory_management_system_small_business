@@ -1,5 +1,6 @@
 const { User } = require("../models");
 const Item = require("./Item");
+const PurchaseOrder = require("./PurchasedOrder");
 const SalesOrder = require("./SalesOrder");
 
 const Mutation = {
@@ -27,6 +28,7 @@ const Mutation = {
 
   ...Item.mutations,
   ...SalesOrder.mutations,
+  ...PurchaseOrder.mutations,
 };
 
 module.exports = Mutation;

@@ -20,14 +20,26 @@ const Item = {
   queries: {
     items: async (_, { input }) => {
       try {
-        let { page, pageSize } = input;
+        let { page, pageSize, searchParams } = input;
+
+        console.log(searchParams, "sdfsdfsdfsdf");
 
         let paginationOption =
           page && pageSize
             ? { limit: pageSize, offset: (page - 1) * pageSize }
             : {};
 
-        let options = { ...paginationOption };
+        let where = searchParams
+          ? {
+              where: {
+                itemName: {
+                  [Op.like]: `%${searchParams}%`,
+                },
+              },
+            }
+          : {};
+
+        let options = { ...paginationOption, ...where };
 
         // let response = await ItemModel.findAll({ ...options });
         let response = await ItemModel.findAndCountAll({ ...options });
